@@ -26,6 +26,28 @@ const registrar = async (req, res) => {
 
 const autenticar = async (req, res) => {
 
+    const { email, password } = req.body;
+    const usuario = await Usuario.findOne({email});
+
+    if(!usuario) {
+        const error = new Error('El usuario no existe');
+        return res.status(400).json({msg: error.message});
+    }
+
+    if(await usuario.comprobarPassword(password)) {
+
+        res.json({
+            id: usuario._id,
+            nombre: usuario.nombre,
+            email: usuario.email
+            //JWT
+        })
+
+    } else {
+        const error = new Error('Password Incorrecto');
+        return res.status(400).json({msg: error.message});
+    }
+
 }
 
 export {
