@@ -22,9 +22,30 @@ const usuarioSchema = mongoose.Schema({
         unique: true
     },
 
+    telefono: {
+        type: String,
+        require: true,
+        trim: true,
+        unique: true
+    },
+
+    solicitudes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Solicitud",
+        }
+    ],
+
     token: {
         type: String
-    }
+    },
+
+    contactos : [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Usuario"
+        }
+    ]
 }, {
     timestamps: true
 });
