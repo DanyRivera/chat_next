@@ -165,13 +165,82 @@ const rechazarSolicitud = async (req, res) => {
 
 const obtenerSolicitudes = async (req, res) => {
 
+    const solicitudes = await Solicitud.find({Para: req.usuario._id}).populate("De");
+
+    //Verificar que haya solicitudes
+    if(solicitudes.length === 0) {
+        return res.json({msg: "No tienes solicitudes"})
+    }
+
+    res.json(solicitudes);
+ 
 }
 
 const eliminarSolicitud = async (req, res) => {
 
+    const { id } = req.params;
+
+    //Verificar el id
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        const error = new Error("Id no Válido");
+        return res.status(400).json({ msg: error.message })
+    }
+
+    //Verificar que exista esa solicitud
+    const solicitud = await Solicitud.findById(id);
+    if (!solicitud) {
+        const error = new Error("Esa solicitud no existe");
+        return res.status(404).json({ msg: error.message })
+    }
+
+    //Verificar que este como pendiente
+    if(solicitud.estado !== "Pendiente") {
+        const error = new Error("La solicitud fue rechazada o aceptada");
+        return res.status(403).json({ msg: error.message })
+    }
+
+    //Verificar que sea el autenticado el que quiere eliminar
+    if(req.usuario._id !== solicitud.Para) {
+        const error = new Error("No puedes eliminar esta solicitud");
+        return res.status(401).json({ msg: error.message })
+    }
+
+    const usuario = Usuario.findById(req.usuario._id);
+
+    try {
+        
+        await solicitud.deleteOne();
+
+        //Eliminar Solicitud del usuario
+        const solicitudesActualizadas = usuario.solicitudes.filter(solicitudUsuario => solicitudUsuario.toString() !== solicitud._id.toString());
+        usuario.solicitudes = solicitudesActualizadas;
+        await usuario.save();
+
+        res.json({msg: "Solicitud Eliminada Correctamente"})
+        
+
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 const eliminarSolicitudes = async (req, res) => {
+
+    const usuario = await Usuario.findById(req.usuario._id);
+    
+    try {
+        
+        await Solicitud.deleteMany({
+            Para: req.usuario._id
+        })
+
+        usuario.solicitudes = [];
+        await usuario.save();
+
+    } catch (error) {
+        
+    }
 
 }
 
