@@ -11,7 +11,7 @@ const checkAuth = async (req, res, next) => {
             
             token = req.headers.authorization.split(' ')[1];
 
-            const decoded = jwt.decode(token, process.env.SECRET_WORD);
+            const decoded = jwt.decode(token, process.env.JWT_SECRET);
 
             req.usuario = await Usuario.findById(decoded.id).select("-password -token -createdAt -updatedAt -__v");
 

@@ -5,11 +5,7 @@ import {
     resetPassword,
     comprobarToken,
     nuevaPassword,
-    perfil,
-    buscarContacto,
-    agregarContacto,
-    eliminarContacto,
-    obtenerContactos
+    perfil
 } from "../controllers/usuarioController.js";
 import checkAuth from "../middleware/checkAuth.js";
 
@@ -22,11 +18,6 @@ router.post('/reset-password', resetPassword); //Verifica Usuario y Asigna Token
 //Get: Comprueba el token para el password-reset
 //Post: Inserta la nueva password
 router.route('/reset-password/:token').get(comprobarToken).post(nuevaPassword)
-
-
-
-router.route('/contactos').post(checkAuth, buscarContacto).get(checkAuth, obtenerContactos);
-router.route('/contactos/:id').post(checkAuth, agregarContacto).delete(checkAuth, eliminarContacto);
 
 router.get('/perfil', checkAuth, perfil);
 

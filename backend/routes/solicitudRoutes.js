@@ -5,7 +5,10 @@ import {
     rechazarSolicitud,
     obtenerSolicitudes,
     eliminarSolicitud,
-    eliminarSolicitudes
+    eliminarSolicitudes,
+    buscarContacto,
+    eliminarContacto,
+    obtenerContactos
 } from "../controllers/solicitudController.js";
 import checkAuth from "../middleware/checkAuth.js";
 
@@ -16,5 +19,8 @@ router.get('/aceptar/:id', checkAuth, aceptarSolicitud);
 router.get('/rechazar/:id', checkAuth, rechazarSolicitud);
 router.delete('/eliminar/:id', checkAuth, eliminarSolicitud);
 router.delete('/eliminar', checkAuth, eliminarSolicitudes);
+
+router.route('/contactos').post(checkAuth, buscarContacto).get(checkAuth, obtenerContactos);
+router.route('/contactos/:id').delete(checkAuth, eliminarContacto);
 
 export default router;

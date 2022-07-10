@@ -1,6 +1,16 @@
 import mongoose from "mongoose";
 
 const chatSchema = mongoose.Schema({
+    nombre: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    esGrupo: {
+        type: Boolean,
+        require: true,
+        default: false
+    },
     usuarios: [
         {
             type: mongoose.Schema.Types.ObjectId,
