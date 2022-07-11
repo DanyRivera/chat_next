@@ -16,7 +16,7 @@ const Formulario = (props) => {
                         <input
                             type="submit"
                             value={props.valueBtnSubmit}
-                            className="mt-8 bg-blue-600 text-white w-full py-3 rounded-sm cursor-pointer"
+                            className="mt-8 bg-blue-600 hover:bg-blue-700 transition-all text-white w-full py-3 rounded-sm cursor-pointer"
                         />
 
                     </form>

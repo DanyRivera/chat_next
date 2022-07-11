@@ -1,5 +1,4 @@
 import useChat from '../hooks/useChat';
-import SendMessage from '../components/SendMessage';
 import Message from './Message';
 
 const ContentChat = () => {
@@ -8,18 +7,18 @@ const ContentChat = () => {
 
     return (
         <>
-            <main className='h-[600px] overflow-y-scroll'>
+            <main className='md:h-[520px] overflow-y-scroll'>
 
-                {chat.map(mensaje => (
-                    <Message 
-                        key={mensaje.id}
-                        mensaje={mensaje}
-                    /> 
-                ))}
+                <div className='pt-5'>
+                    {chat.map(mensaje => (
+                        <Message
+                            key={mensaje.id}
+                            mensaje={mensaje}
+                        />
+                    ))}
+                </div>
 
             </main>
-
-            <SendMessage />
 
         </>
     )
