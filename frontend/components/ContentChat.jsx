@@ -7,7 +7,7 @@ const ContentChat = () => {
 
     return (
         <>
-            <main className='md:h-[520px] overflow-y-scroll'>
+            <main className='md:h-[75vh] overflow-y-scroll'>
 
                 <div className='pt-5'>
                     {chat.map(mensaje => (

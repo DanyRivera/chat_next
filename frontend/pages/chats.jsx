@@ -4,7 +4,7 @@ import VistaChat from '../components/VistaChat';
 
 const chats = () => {
 
-    const arr = [1, 2, 3, 4, 5, 6]
+    const arr = [1, 2, 3, 4, 5]
 
     return (
 
@@ -13,13 +13,13 @@ const chats = () => {
         >
             <section>
 
-                <div className='md:flex divide-x'>
+                <div className='md:flex divide-x h-[90vh]'>
 
                     <div className='md:w-1/4'>
 
                         <h1 className='my-5 ml-5 text-2xl md:text-3xl text-blue-600 font-bold'>Tus Chats</h1>
 
-                        <div className={`${arr.length > 8 ? 'md:h-[570px] md:overflow-y-scroll' : ''}`}>
+                        <div className={`${arr.length > 10 ? 'md:h-[80vh] md:overflow-y-scroll' : ''}`}>
                             {arr.map(chat => (
                                 <VistaChat />
                             ))}
