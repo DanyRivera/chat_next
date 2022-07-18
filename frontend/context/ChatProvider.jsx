@@ -1,42 +1,43 @@
 import { useState, createContext } from "react";
+import dataChats from '../data/chats.json';
 
 const ChatContext = createContext();
 
 const ChatProvider = ({ children }) => {
 
-    const [personaActual, setPersonaActual] = useState(1);
+    const [chat, setChat] = useState(dataChats[0]);
+    const [chatsUsuario, setChatsUsuario] = useState([]);
     const [mensaje, setMensaje] = useState({});
-    const [chat, setChat] = useState([]);
 
-    const handleClickpersona = persona => {
-        setPersonaActual(persona);
+    const handleModificarChat = idChat => {
+        const chatActivo = chatsUsuario.find(chat => chat._id === idChat);
+        setChat(chatActivo);
     }
 
-    const handleChangeMensaje = msg => {
-        setMensaje(msg);
+    const handleChatsUsuarios = chats => {
+        setChatsUsuario(chats);
+    }
+
+    const handleChangeMensaje = obj => {
+        setMensaje(obj);
     }
 
     const handleSubmitMensaje = e => {
-        e.preventDefault();
-        setChat([...chat, mensaje])
-        setMensaje({});
-    }
-
-    const handleClickBorrarChat = () => {
-        setChat([]);
-        setMensaje({});
+        // e.preventDefault();
+        // setChat(chat.mensajes.push(mensaje))
+        // setMensaje({});
     }
 
     return (
         <ChatContext.Provider
             value={{
-                personaActual,
-                mensaje,
                 chat,
-                handleClickpersona,
+                chatsUsuario,
+                mensaje,
+                handleModificarChat,
+                handleChatsUsuarios,
                 handleChangeMensaje,
-                handleSubmitMensaje,
-                handleClickBorrarChat
+                handleSubmitMensaje
             }}
         >
             {children}

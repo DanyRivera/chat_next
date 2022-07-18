@@ -1,0 +1,88 @@
+[
+    {
+        "_id": "62c779bbdfcd14fb027fede7",
+        "nombre": "Jose",
+        "esGrupo": false,
+        "usuarios": [
+            {
+                "_id": "62c256724a6583724fa19489",
+                "nombre": "Dany"
+            },
+            {
+                "_id": "62c24f6c9be95e04cec48c72",
+                "nombre": "Jose"
+            }
+        ],
+        "mensajes": [
+            {
+                "_id": "62ca36639d9a45223ea5479e",
+                "contenido": "Hola",
+                "hora": "2022-07-10T02:11:50.796Z",
+                "autor": "62c24f6c9be95e04cec48c72"
+            },
+            {
+                "_id": "62ca367e9d9a45223ea547a3",
+                "contenido": "Que onda!",
+                "hora": "2022-07-10T02:11:50.796Z",
+                "autor": "62c256724a6583724fa19489"
+            },
+            {
+                "_id": "62ca368b9d9a45223ea547a8",
+                "contenido": "Oyeee",
+                "hora": "2022-07-10T02:11:50.796Z",
+                "autor": "62c24f6c9be95e04cec48c72"
+            },
+            {
+                "_id": "62ca369f9d9a45223ea547ad",
+                "contenido": "Eu",
+                "hora": "2022-07-10T02:11:50.796Z",
+                "autor": "62c256724a6583724fa19489"
+            }
+        ],
+        "createdAt": "2022-07-08T00:26:35.292Z",
+        "updatedAt": "2022-07-10T02:17:03.790Z",
+        "__v": 10
+    },
+    {
+        "_id": "62c7ab9a9f19423a6741088c",
+        "nombre": "Luis",
+        "esGrupo": false,
+        "usuarios": [
+            {
+                "_id": "62c256724a6583724fa19489",
+                "nombre": "Dany"
+            },
+            {
+                "_id": "62c24f959be95e04cec48c7b",
+                "nombre": "Luis"
+            }
+        ],
+        "mensajes": [],
+        "createdAt": "2022-07-08T03:59:22.203Z",
+        "updatedAt": "2022-07-08T03:59:22.203Z",
+        "__v": 0
+    },
+    {
+        "_id": "62c7abce9f19423a6741089a",
+        "nombre": "Mate",
+        "esGrupo": true,
+        "usuarios": [
+            {
+                "_id": "62c256724a6583724fa19489",
+                "nombre": "Dany"
+            },
+            {
+                "_id": "62c24f959be95e04cec48c7b",
+                "nombre": "Luis"
+            },
+            {
+                "_id": "62c24f6c9be95e04cec48c72",
+                "nombre": "Jose"
+            }
+        ],
+        "mensajes": [],
+        "createdAt": "2022-07-08T04:00:14.894Z",
+        "updatedAt": "2022-07-08T04:00:14.894Z",
+        "__v": 0
+    }
+]

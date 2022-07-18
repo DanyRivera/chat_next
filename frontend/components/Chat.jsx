@@ -6,7 +6,7 @@ const Chat = () => {
     return (
         <>
             <HeadChat />
-            <ContentChat />
+            <ContentChat/>
             <SendMessage />
         </>
     )

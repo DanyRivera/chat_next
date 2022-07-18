@@ -13,7 +13,20 @@ const checkAuth = async (req, res, next) => {
 
             const decoded = jwt.decode(token, process.env.JWT_SECRET);
 
-            req.usuario = await Usuario.findById(decoded.id).select("-password -token -createdAt -updatedAt -__v");
+            req.usuario = await Usuario.findById(decoded.id).select("-password -token -createdAt -updatedAt -__v")
+                .populate("contactos", {
+                    nombre: 1, 
+                    email: 1,
+                    telefono: 1
+                })
+                .populate({
+                    path: "solicitudes",
+                    populate: {
+                        path: "De",
+                        model: "Usuario",
+                        select: ["nombre", "email", "telefono"]
+                    }
+                })
 
             return next();
 

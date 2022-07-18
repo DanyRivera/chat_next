@@ -1,5 +1,5 @@
-export const obtenerHora = () => {
-    const hoy = new Date();
+export const formatearHora = fecha => {
+    const hoy = new Date(fecha);
     const hora = hoy.getHours();
     const minutes = hoy.getMinutes();
 
@@ -16,4 +16,21 @@ export const generarId = () => {
     const fecha = Date.now().toString(36);
 
     return random + fecha;
+}
+
+export const formatearFecha = fecha => {
+    const fechaNueva = new Date(fecha);
+
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit'
+    }
+
+    return fechaNueva.toLocaleDateString('es-ES', options);
+}
+
+export const formatearFecha2 = fecha => {
+    const fechaNueva = new Date(fecha);
+    return fechaNueva.toLocaleDateString('es-ES');
 }

@@ -84,6 +84,10 @@ const obtenerChats = async (req, res) => {
 
     const chats = await Chat.find({ usuarios: req.usuario._id }).populate("usuarios", {
         nombre: 1
+    }).populate("mensajes" ,{
+        contenido: 1,
+        hora: 1,
+        autor: 1
     });
 
     const chatsArr = chats.map(chat => {
