@@ -48,7 +48,7 @@ const enviarSolicitud = async (req, res) => {
                 usuario.save()
             ])
 
-            res.json(solicitud);
+            res.json({msg: "Solicitud enviada correctamente"});
 
         } catch (error) {
             console.log(error)
@@ -204,11 +204,6 @@ const obtenerSolicitudes = async (req, res) => {
 
     const solicitudes = await Solicitud.find({ Para: req.usuario._id }).populate("De");
 
-    //Verificar que haya solicitudes
-    if (solicitudes.length === 0) {
-        return res.json({ msg: "No tienes solicitudes" })
-    }
-
     res.json(solicitudes);
 
 }
@@ -289,7 +284,9 @@ const eliminarSolicitudes = async (req, res) => {
 
 const buscarContacto = async (req, res) => {
     const { email } = req.body;
-    const contacto = await Usuario.findOne({ email }).select("-password -token -createdAt -updatedAt -__v -contactos");
+    const contacto = await Usuario.findOne({ email }).select("-password -token -createdAt -updatedAt -__v -contactos -solicitudes");
+
+    console.log(req.body);
 
     if (!contacto) {
         const error = new Error('Ese usuario no existe');

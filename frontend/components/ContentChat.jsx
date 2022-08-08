@@ -1,9 +1,9 @@
-import useChat from '../hooks/useChat';
+import useAuth from '../hooks/useAuth';
 import Message from './Message';
 
 const ContentChat = () => {
 
-    const { chat } = useChat();
+    const { chat } = useAuth();
 
     return (
         <>

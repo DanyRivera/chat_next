@@ -1,4 +1,6 @@
 import { useRouter } from "next/router";
+import RutaPrivada from "../components/RutaPrivada";
+import useAuth from "../hooks/useAuth";
 import Head from 'next/head';
 
 const Layout = (props) => {
@@ -11,8 +13,9 @@ const Layout = (props) => {
         { id: 3, nombre: "Solicitudes", url: "/solicitudes" },
     ]
 
+
     return (
-        <>
+        <RutaPrivada>
             <Head>
                 <title>{props.titulo} | ChatApp</title>
                 <meta name="description" content="Chat App" />
@@ -57,7 +60,7 @@ const Layout = (props) => {
                 {props.children}
 
             </header>
-        </>
+        </RutaPrivada>
     )
 }
 

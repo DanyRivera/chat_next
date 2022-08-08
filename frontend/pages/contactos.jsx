@@ -49,10 +49,10 @@ const contactos = () => {
       {usuario.contactos.length === 0 ? (
         <p className="text-center my-24 text-2xl md:m-36 text-blue-600 font-bold">No tienes contactos aún!</p>
       ) : (
-        <div className="mx-7 mb-14 md:mx-10 grid md:grid-cols-4 gap-14">
+        <div className="mx-7 mb-14 md:mx-10 grid md:grid-cols-2 xl:grid-cols-4 gap-14">
 
           {usuario.contactos.map(contacto => (
-            <div className="shadow-xl border rounded-xl">
+            <div className="shadow-xl border rounded-xl" key={contacto._id}>
               <p className="text-center my-4 text-2xl font-bold">{contacto.nombre}</p>
               <p className="text-center my-2 text-lg"><span className="font-bold text-blue-600">Email:{' '}</span>{contacto.email}</p>
               <p className="text-center my-2 text-lg"><span className="font-bold text-blue-600">Teléfono:{' '}</span>{contacto.telefono}</p>

@@ -1,6 +1,7 @@
 import Usuario from "../models/Usuario.js";
 import generarJWT from "../helpers/generarJWT.js";
 import generarId from "../helpers/generarId.js";
+import { emailPassword } from "../helpers/emails.js";
 
 const registrar = async (req, res) => {
 
@@ -19,7 +20,7 @@ const registrar = async (req, res) => {
         const usuario = new Usuario(req.body);
         usuario.token = '';
         const usuarioAlmacenado = await usuario.save();
-        res.json(usuarioAlmacenado);
+        res.json({msg: "Cuenta creada correctamente, ya puedes iniciar sesión"});
         
     } catch (error) {
         console.log(error.message)
@@ -68,7 +69,13 @@ const resetPassword = async (req, res) => {
         
         usuario.token = generarId();
         await usuario.save();
+        emailPassword({
+            email: usuario.email,
+            nombre: usuario.nombre,
+            token: usuario.token
+        })
         res.json({msg: "Hemos enviado las instrucciones por email"});
+
 
     } catch (error) {
         console.log(error);
@@ -106,7 +113,7 @@ const nuevaPassword = async (req, res) => {
         try {
             
             await usuario.save();
-            res.json({msg: "Password Modificado Correctamente"})
+            res.json({msg: "Password Modificado Correctamente - Ya Puedes Iniciar Sesión"})
 
         } catch (error) {
             console.log(error);
@@ -121,7 +128,7 @@ const nuevaPassword = async (req, res) => {
 
 const perfil = (req, res) => {
     const {usuario} = req;
-    res.json({usuario});
+    res.json(usuario);
 }
 
 export {

@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import connectDB from "./config/db.js";
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
@@ -11,6 +12,22 @@ dotenv.config();
 app.use(express.json())
 
 connectDB();
+
+//Configurar CORS
+const whiteList = [
+    process.env.FRONTEND_URL
+];
+const corsOptions = {
+    origin: function(origin, callback) {
+        if(whiteList.includes(origin)) {
+            callback(null, true)
+        } else {
+            callback(new Error('Error de CORS'))
+        }
+    }
+}
+
+app.use(cors(corsOptions));
 
 //Routing
 app.use('/api/usuarios', usuarioRoutes);

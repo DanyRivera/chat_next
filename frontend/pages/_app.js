@@ -1,11 +1,14 @@
 import '../styles/globals.css';
-import { ChatProvider } from '../context/ChatProvider';
+import { AuthProvider } from '../context/AuthProvider';
+import { ContactosProvider } from '../context/ContactosProvider';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChatProvider>
-      <Component {...pageProps} />
-    </ChatProvider>
+    <AuthProvider>
+      <ContactosProvider>
+        <Component {...pageProps} />
+      </ContactosProvider>
+    </AuthProvider>
   )
 }
 

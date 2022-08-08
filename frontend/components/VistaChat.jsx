@@ -1,8 +1,8 @@
-import useChat from "../hooks/useChat"
+import useAuth from "../hooks/useAuth";
 
 const VistaChat = ({nombre, id}) => {
 
-    const {chat, handleModificarChat} = useChat();
+    const {chat, handleModificarChat} = useAuth();
 
     return (
         <div 

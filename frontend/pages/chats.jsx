@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import Layout from '../layout/Layout';
 import Chat from '../components/Chat';
 import VistaChat from '../components/VistaChat';
-import useChat from '../hooks/useChat';
+import useAuth from '../hooks/useAuth';
 import dataChats from '../data/chats.json';
 
 const chats = () => {
 
-    const {chatsUsuario, handleChatsUsuarios} = useChat();
+    const {chatsUsuario, handleChatsUsuarios} = useAuth();
 
     useEffect(() => {
         handleChatsUsuarios(dataChats);

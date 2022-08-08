@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import useChat from "../hooks/useChat";
+import useAuth from "../hooks/useAuth";
 
 const SendMessage = () => {
 
-    const { chat, mensaje, handleSubmitMensaje, handleChangeMensaje } = useChat();
+    const { chat, mensaje, handleSubmitMensaje, handleChangeMensaje } = useAuth();
 
     useEffect(() => {
         handleChangeMensaje({});

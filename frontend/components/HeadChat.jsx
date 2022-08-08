@@ -1,8 +1,8 @@
-import useChat from "../hooks/useChat"
+import useAuth from "../hooks/useAuth";
 
 const HeadChat = () => {
 
-    const { handleClickBorrarChat } = useChat();
+    const { handleClickBorrarChat } = useAuth();
 
     return (
         <div className="flex justify-between items-center mb-1 px-6 py-4 bg-slate-100 shadow-md">
