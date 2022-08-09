@@ -138,8 +138,7 @@ const aceptarSolicitud = async (req, res) => {
 
         solicitud.estado = "Aceptada";
 
-        const solicitudesActualizadas = usuario.solicitudes.filter(solicitudUsuario => solicitudUsuario.toString() !== solicitud._id.toString());
-        usuario.solicitudes = solicitudesActualizadas;
+        usuario.solicitudes.pull(solicitud._id)
 
         usuario.contactos.push(solicitud.De);
         contacto.contactos.push(solicitud.Para)
@@ -202,7 +201,7 @@ const rechazarSolicitud = async (req, res) => {
 
 const obtenerSolicitudes = async (req, res) => {
 
-    const solicitudes = await Solicitud.find({ Para: req.usuario._id }).populate("De");
+    const solicitudes = await Solicitud.find({ Para: req.usuario._id, estado: 'Pendiente' }).populate("De");
 
     res.json(solicitudes);
 
@@ -285,8 +284,6 @@ const eliminarSolicitudes = async (req, res) => {
 const buscarContacto = async (req, res) => {
     const { email } = req.body;
     const contacto = await Usuario.findOne({ email }).select("-password -token -createdAt -updatedAt -__v -contactos -solicitudes");
-
-    console.log(req.body);
 
     if (!contacto) {
         const error = new Error('Ese usuario no existe');

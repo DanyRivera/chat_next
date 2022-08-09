@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
 
                 const { data } = await clienteAxios('/usuarios/perfil', config);
                 setAuth(data);
-                router.push('/chats');
+                // router.push('/chats');
 
             } catch (error) {
                 setAuth({})
