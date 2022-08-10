@@ -1,7 +1,6 @@
 import { useState, useEffect, createContext } from "react";
 import { useRouter } from "next/router";
 import clienteAxios from "../config/clienteAxios";
-import dataChats from '../data/chats.json';
 
 const AuthContext = createContext();
 
@@ -9,9 +8,6 @@ const AuthProvider = ({ children }) => {
 
     const router = useRouter();
 
-    const [chat, setChat] = useState(dataChats[0]);
-    const [chatsUsuario, setChatsUsuario] = useState([]);
-    const [mensaje, setMensaje] = useState({});
     const [alerta, setAlerta] = useState({})
     const [cargando, setCargando] = useState(true);
     const [auth, setAuth] = useState({});
@@ -52,17 +48,8 @@ const AuthProvider = ({ children }) => {
 
     }, [])
 
-    const handleModificarChat = idChat => {
-        const chatActivo = chatsUsuario.find(chat => chat._id === idChat);
-        setChat(chatActivo);
-    }
-
-    const handleChatsUsuarios = chats => {
-        setChatsUsuario(chats);
-    }
-
     const handleChangeMensaje = obj => {
-        setMensaje(obj);
+        // setMensaje(obj);
     }
 
     const handleSubmitMensaje = e => {
@@ -75,16 +62,9 @@ const AuthProvider = ({ children }) => {
     return (
         <AuthContext.Provider
             value={{
-                chat,
-                chatsUsuario,
-                mensaje,
                 alerta,
                 auth,
                 cargando,
-                handleModificarChat,
-                handleChatsUsuarios,
-                handleChangeMensaje,
-                handleSubmitMensaje,
                 setAlerta,
                 setAuth
             }}

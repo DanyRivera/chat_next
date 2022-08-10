@@ -1,8 +1,8 @@
-import useAuth from "../hooks/useAuth";
+import useChat from "../hooks/useChat"
 
 const HeadChat = () => {
 
-    const { handleClickBorrarChat } = useAuth();
+    const {chat} = useChat();
 
     return (
         <div className="flex justify-between items-center mb-1 px-6 py-4 bg-slate-100 shadow-md">
@@ -13,12 +13,12 @@ const HeadChat = () => {
                     </svg>
                 </div>
                 <div className="text-lg text-slate-500">
-                    Nombre Chat
+                    {chat.nombre}
                 </div>
             </div>
 
             <button
-                onClick={ () => handleClickBorrarChat() }
+                // onClick={ () => handleClickBorrarChat() }
                 className="outline-none"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

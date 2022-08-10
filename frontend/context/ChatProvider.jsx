@@ -43,6 +43,8 @@ const ChatProvider = (props) => {
     const obtenerChats = async () => {
 
         try {
+
+            setCargando(true);
             
             const token = localStorage.getItem('token');
 
@@ -65,24 +67,62 @@ const ChatProvider = (props) => {
 
         } catch (error) {
             console.log(error);
+        } finally {
+            setCargando(false);
         }
 
     }
 
-    const cambiarChat = () => {
-        const chatActivo = chats.find(chatState => chatState._id === chat._id);
-        console.log(chatActivo);
+    const cambiarChat = chatId => {
+        const chatActivo = chats.find(chatState => chatState._id === chatId);
         setChat(chatActivo);
     }
+
+    const eliminarChat = async chat => {
+        try {
+            
+            const token = localStorage.getItem('token');
+
+            if (!token) return;
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+            const {data} = await clienteAxios.delete(`/chats/${chat._id}`, config);
+
+            toast.success(data.msg, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
+
+            const chatsState = [...chats];
+            const chatsActualizados = chatsState.filter(chatState => chatState._id !== chat._id);
+            setChats(chatsActualizados);
+
+        } catch (error) {
+            console.log(error);
+        }
+    } 
 
     return (
         <ChatContext.Provider
             value={{
                 chat,
                 chats,
+                cargando,
                 crearChat,
                 obtenerChats,
-                cambiarChat
+                cambiarChat,
+                eliminarChat
             }}
         >
             {props.children}

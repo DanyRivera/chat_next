@@ -1,12 +1,9 @@
 import { useEffect } from "react";
-import useAuth from "../hooks/useAuth";
 
 const SendMessage = () => {
 
-    const { chat, mensaje, handleSubmitMensaje, handleChangeMensaje } = useAuth();
-
     useEffect(() => {
-        handleChangeMensaje({});
+        // handleChangeMensaje({});
     }, [chat])
     
     
@@ -14,17 +11,17 @@ const SendMessage = () => {
 
         <div className=' mt-3 px-2 md:mt-0 md:mr-5 relative'>
             <form
-                onSubmit={handleSubmitMensaje}
+                // onSubmit={handleSubmitMensaje}
             >
                 <input
                     type="text"
                     placeholder='Type a Mesage'
                     className='w-full py-3 px-3 rounded-full bg-slate-100 outline-none'
-                    value={mensaje?.contenido || ''}
-                    onChange={e => handleChangeMensaje({
-                        chat: chat._id,
-                        contenido: e.target.value,
-                    })}
+                    // value={mensaje?.contenido || ''}
+                    // onChange={e => handleChangeMensaje({
+                    //     chat: chat._id,
+                    //     contenido: e.target.value,
+                    // })}
                 />
 
                 <input
