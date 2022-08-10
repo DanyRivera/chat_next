@@ -1,22 +1,27 @@
 import { useState, createContext } from "react";
 import clienteAxios from "../config/clienteAxios";
+import { toast } from "react-toastify";
 
 const ContactosContext = createContext();
 
 const ContactosProvider = (props) => {
 
     const [alerta, setAlerta] = useState({});
-    const [cargando, setCargando] = useState(false);
+    const [cargando, setCargando] = useState(true);
     const [contacto, setContacto] = useState({});
     const [solicitudes, setSolicitudes] = useState([]);
     const [modalEliminarSolicitud, setModalEliminarSolicitud] = useState(false);
     const [solicitud, setSolicitud] = useState({});
+    const [modalEliminarSolicitudes, setModalEliminarSolicitudes] = useState(false);
+    const [contactos, setContactos] = useState([]);
+    const [modalEliminarContacto, setModalEliminarContacto] = useState(false);
+
 
     const submitContacto = async email => {
 
         try {
 
-            setCargando(true);
+            setCargando(true)
 
             const token = localStorage.getItem('token');
 
@@ -40,13 +45,16 @@ const ContactosProvider = (props) => {
                 error: true
             })
 
-            setContacto({})
+            setContacto({});
 
             setTimeout(() => {
                 setAlerta({});
             }, 3000);
+
+        } finally {
+            setCargando(false);
         }
-        setCargando(false);
+
 
     }
 
@@ -69,31 +77,39 @@ const ContactosProvider = (props) => {
                 Para: id
             }, config);
 
-            setAlerta({
-                msg: data.msg,
-                error: false
+            toast.success(data.msg, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
             })
 
             setContacto({})
 
-            setTimeout(() => {
-                setAlerta({})
-            }, 3500);
 
         } catch (error) {
             setAlerta({
                 msg: error.response.data.msg,
                 error: true
             })
+
+            setTimeout(() => {
+                setAlerta({})
+            }, 3500);
         }
 
     }
 
     const obtenerSolicitudes = async () => {
 
-        setCargando(true);
 
         try {
+
+            setCargando(true);
+
             const token = localStorage.getItem('token');
 
             if (!token) return;
@@ -113,7 +129,6 @@ const ContactosProvider = (props) => {
         } finally {
             setCargando(false);
         }
-
     }
 
     const aceptarSolicitud = async solicitudId => {
@@ -138,9 +153,14 @@ const ContactosProvider = (props) => {
 
             setSolicitudes(solicitudesActualizadas);
 
-            setAlerta({
-                msg: 'Solicitud Aceptada Correctamente',
-                error: false
+            toast.success('Solicitud Aceptada Correctamente', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
             })
 
 
@@ -149,11 +169,13 @@ const ContactosProvider = (props) => {
                 msg: error.response.data.msg,
                 error: true
             })
+
+            setTimeout(() => {
+                setAlerta({});
+            }, 3500);
         }
 
-        setTimeout(() => {
-            setAlerta({});
-        }, 3500);
+
 
     }
 
@@ -178,9 +200,14 @@ const ContactosProvider = (props) => {
 
             setSolicitudes(solicitudesActualizadas);
 
-            setAlerta({
-                msg: 'Solicitud Rechazada Correctamente',
-                error: false
+            toast.success('Solicitud Rechazada Correctamente', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
             })
 
 
@@ -215,12 +242,7 @@ const ContactosProvider = (props) => {
                 }
             }
 
-            const { data } = await clienteAxios.delete(`/solicitudes/eliminar/${solicitud._id}`, config);  
-
-            setAlerta({
-                msg: data.msg,
-                error: false
-            })
+            const { data } = await clienteAxios.delete(`/solicitudes/eliminar/${solicitud._id}`, config);
 
             setModalEliminarSolicitud(false);
 
@@ -230,14 +252,147 @@ const ContactosProvider = (props) => {
             setSolicitudes(solicitudesActualizadas);
             setSolicitud({});
 
-            setTimeout(() => {
-                setAlerta({});
-            }, 3500);
+            toast.success(data.msg, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
 
         } catch (error) {
             console.log(error);
         }
     }
+
+    const handleModalEliminarSolicitudes = () => {
+        setModalEliminarSolicitudes(!modalEliminarSolicitudes);
+    }
+
+    const eliminarSolicitudes = async () => {
+
+        try {
+
+            const token = localStorage.getItem('token');
+
+            if (!token) return;
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+            const { data } = await clienteAxios.delete('/solicitudes/eliminar', config);
+
+            toast.success(data.msg, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
+
+            setModalEliminarSolicitudes(false);
+            setSolicitudes([]);
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    const obtenerContactos = async () => {
+
+
+        try {
+
+            setCargando(true);
+
+            const token = localStorage.getItem('token');
+
+            if (!token) return;
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+            const { data } = await clienteAxios('/solicitudes/contactos', config);
+
+            setContactos(data);
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setCargando(false);
+        }
+
+
+    }
+
+    const handleModalEliminarContacto = contacto => {
+        setModalEliminarContacto(!modalEliminarContacto);
+        setContacto(contacto);
+    }
+
+    const eliminarContacto = async () => {
+
+        try {
+
+            const token = localStorage.getItem('token');
+
+            if (!token) return;
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+            const { data } = await clienteAxios.delete(`/solicitudes/contactos/${contacto._id}`, config);
+
+            toast.success(data.msg, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            })
+
+            const contactosState = [...contactos];
+            const contactosActualizados = contactosState.filter(contactoID => contactoID._id !== contacto._id);
+
+            setContactos(contactosActualizados);
+            setContacto({});
+
+        } catch (error) {
+
+            setAlerta({
+                msg: error.response.data.msg,
+                error: true
+            })
+
+            setTimeout(() => {
+                setAlerta({});
+            }, 3500);
+
+        }
+
+        setModalEliminarContacto(false);
+    }
+
+    
 
     return (
         <ContactosContext.Provider
@@ -247,6 +402,9 @@ const ContactosProvider = (props) => {
                 cargando,
                 solicitudes,
                 modalEliminarSolicitud,
+                modalEliminarSolicitudes,
+                contactos,
+                modalEliminarContacto,
                 submitContacto,
                 setAlerta,
                 submitSolicitud,
@@ -254,7 +412,12 @@ const ContactosProvider = (props) => {
                 aceptarSolicitud,
                 rechazarSolicitud,
                 handleModalEliminarSolicitud,
-                eliminarSolicitud
+                eliminarSolicitud,
+                handleModalEliminarSolicitudes,
+                eliminarSolicitudes,
+                obtenerContactos,
+                handleModalEliminarContacto,
+                eliminarContacto
             }}
         >
             {props.children}

@@ -2,13 +2,13 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 import useContactos from '../hooks/useContactos'
 
-const ModalEliminarSolicitud = () => {
+const ModalEliminarSolicitudes = () => {
 
-    const { handleModalEliminarSolicitud, modalEliminarSolicitud, eliminarSolicitud } = useContactos();
+    const { handleModalEliminarSolicitudes, modalEliminarSolicitudes, eliminarSolicitudes } = useContactos();
 
     return (
-        <Transition appear show={modalEliminarSolicitud} as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={handleModalEliminarSolicitud}>
+        <Transition appear show={modalEliminarSolicitudes} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={handleModalEliminarSolicitudes}>
                 <Transition.Child
                     as={Fragment}
                     enter="ease-out duration-300"
@@ -40,7 +40,7 @@ const ModalEliminarSolicitud = () => {
                                     <button
                                         type="button"
                                         className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                        onClick={handleModalEliminarSolicitud}
+                                        onClick={handleModalEliminarSolicitudes}
                                     >
                                         <span className="sr-only">Cerrar</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
@@ -60,11 +60,11 @@ const ModalEliminarSolicitud = () => {
 
                                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                                         <Dialog.Title as="h3" className="text-lg leading-6 font-bold text-gray-900">
-                                            Eliminar Solicitud
+                                            Eliminar Solicitudes
                                         </Dialog.Title>
 
                                         <div className='mt-2'>
-                                            <p className='text-sm text-gray-500'>Una solicitud eliminada no podra ser recupera, a menos que se reenvie.</p>
+                                            <p className='text-sm text-gray-500'>Las solicitudes no podran ser recuperadas a menos que el usuario reenvie su solicitud correspondiente.</p>
                                         </div>
 
                                     </div>
@@ -73,14 +73,14 @@ const ModalEliminarSolicitud = () => {
                                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                                     <button
                                         type="button"
-                                        onClick={eliminarSolicitud}
+                                        onClick={eliminarSolicitudes}
                                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
                                     >
                                         Eliminar
                                     </button>
                                     <button
                                         type="button"
-                                        onClick={handleModalEliminarSolicitud}
+                                        onClick={handleModalEliminarSolicitudes}
                                         className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
                                     > Cancelar</button>
 
@@ -94,4 +94,4 @@ const ModalEliminarSolicitud = () => {
     )
 }
 
-export default ModalEliminarSolicitud;
+export default ModalEliminarSolicitudes;

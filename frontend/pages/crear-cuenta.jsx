@@ -63,16 +63,16 @@ const CrearCuenta = () => {
             setPassword('');
             setRepetirPassword('');
 
-            setTimeout(() => {
-                setAlerta({});
-            }, 10000);
-
         } catch (error) {
             setAlerta({
                 msg: error.response.data.msg,
                 error: true
             })
         }
+
+        setTimeout(() => {
+            setAlerta({});
+        }, 3000);
 
     }
 

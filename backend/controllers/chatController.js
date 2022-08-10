@@ -28,7 +28,7 @@ const crearChat = async (req, res) => {
 
         contactos.length === 1 ? chat.nombre = contactos[0].nombre : null;
 
-        return res.json({ msg: "Abriendo... Chat", chat });
+        return res.json(chat);
     }
 
     //Verificar que sean minimo dos usuarios

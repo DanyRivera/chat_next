@@ -26,8 +26,10 @@ const enviarSolicitud = async (req, res) => {
         return res.status(401).json({ msg: error.message })
     }
 
+
+    const usuarioAutenticado = await Usuario.findById(req.usuario._id)
     //Verificar que no este en tus contactos
-    if (req.usuario.contactos.includes(id.toString())) {
+    if (usuarioAutenticado.contactos.includes(id.toString())) {
         const error = new Error("Este usuario ya está en tus contactos");
         return res.status(401).json({ msg: error.message })
     }
@@ -48,7 +50,7 @@ const enviarSolicitud = async (req, res) => {
                 usuario.save()
             ])
 
-            res.json({msg: "Solicitud enviada correctamente"});
+            res.json({ msg: "Solicitud enviada correctamente" });
 
         } catch (error) {
             console.log(error)
@@ -65,7 +67,6 @@ const enviarSolicitud = async (req, res) => {
         } else {
 
             //Enviar de nuevo la solicitud
-
             try {
 
                 solicitud.estado = "Pendiente";
@@ -123,16 +124,40 @@ const aceptarSolicitud = async (req, res) => {
         return res.status(403).json({ msg: error.message })
     }
 
-    //Verificar que no este en tus contactos
-    if (req.usuario.contactos.includes(solicitud.Para.toString())) {
-        const error = new Error('El contacto ya existe');
-        return res.status(403).json({ msg: error.message })
-    }
-
     const [usuario, contacto] = await Promise.all([
         Usuario.findById(req.usuario._id),
         Usuario.findById(solicitud.De)
     ])
+
+    //Verificar que no este en tus contactos y ver si es una segunda solicitud
+    if (usuario.contactos.includes(contacto._id.toString())) {
+
+        if (!contacto.contactos.includes(usuario._id.toString())) {
+
+            try {
+
+                solicitud.estado = "Aceptada";
+                contacto.contactos.push(usuario._id);
+                usuario.solicitudes.pull(solicitud._id)
+
+                await Promise.all([
+                    solicitud.save(),
+                    contacto.save()
+                ]);
+
+                res.json(solicitud);
+
+            } catch (error) {
+                console.log(error);
+            }
+
+        } else {
+            const error = new Error('El contacto ya existe');
+            return res.status(403).json({ msg: error.message })
+        }
+
+        return;
+    }
 
     try {
 
@@ -313,16 +338,16 @@ const eliminarContacto = async (req, res) => {
         return res.status(404).json({ msg: error.message })
     }
 
-    if (!req.usuario.contactos.includes(contacto._id)) {
-        const error = new Error('Ese usuario no es tu contacto');
-        return res.status(403).json({ msg: error.message })
-    }
-
     const usuario = await Usuario.findById(req.usuario._id);
+
+    if (!usuario.contactos.includes(contacto._id.toString())) {
+        const error = new Error('Ese usuario no es tu contacto');
+        return res.status(404).json({ msg: error.message })
+    }
 
     try {
 
-        usuario.contactos = usuario.contactos.filter(contactoID => contactoID.toString() !== id.toString());
+        usuario.contactos.pull(contacto._id);
 
         await Promise.all([
             Solicitud.findOneAndDelete({
@@ -341,10 +366,6 @@ const eliminarContacto = async (req, res) => {
 }
 
 const obtenerContactos = async (req, res) => {
-
-    if (req.usuario.contactos.length === 0) {
-        return res.json({ msg: "Aun no tienes contactos" })
-    }
 
     const usuario = await Usuario.findById(req.usuario._id).populate("contactos", {
         nombre: 1,

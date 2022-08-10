@@ -1,7 +1,8 @@
 import { useRouter } from "next/router";
 import RutaPrivada from "../components/RutaPrivada";
-import useAuth from "../hooks/useAuth";
 import Head from 'next/head';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = (props) => {
 
@@ -12,7 +13,6 @@ const Layout = (props) => {
         { id: 2, nombre: "Contactos", url: "/contactos" },
         { id: 3, nombre: "Solicitudes", url: "/solicitudes" },
     ]
-
 
     return (
         <RutaPrivada>
@@ -60,6 +60,8 @@ const Layout = (props) => {
                 {props.children}
 
             </header>
+
+            <ToastContainer />
         </RutaPrivada>
     )
 }

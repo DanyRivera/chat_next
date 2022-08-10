@@ -48,6 +48,9 @@ const login = () => {
 
         }
 
+        setTimeout(() => {
+            setAlerta({})
+        }, 35000);
     }
 
     return (

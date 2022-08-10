@@ -1,29 +1,19 @@
+import { useEffect } from "react";
 import Link from "next/link";
 import Layout from "../layout/Layout";
+import Contacto from "../components/Contacto";
+import ModalEliminarContacto from "../components/ModalEliminarContacto";
+import Alerta from "../components/Alerta";
+import Spinner from "../components/Spinner";
+import useContactos from "../hooks/useContactos";
 
 const contactos = () => {
 
-  const usuario = {
-    _id: "62c256724a6583724fa19489",
-    nombre: "Dany",
-    email: "correo@correo.com",
-    telefono: "2222222",
-    solicitudes: [],
-    contactos: [
-      {
-        _id: "62c24f959be95e04cec48c7b",
-        nombre: "Luis",
-        email: "correo3@correo.com",
-        telefono: "5555555"
-      },
-      {
-        _id: "62c24f6c9be95e04cec48c72",
-        nombre: "Jose",
-        email: "correo2@correo.com",
-        telefono: "55555555"
-      }
-    ]
-  }
+  const { obtenerContactos, contactos, cargando, alerta } = useContactos();
+
+  useEffect(() => {
+    obtenerContactos();
+  }, [])
 
   return (
     <Layout
@@ -45,31 +35,30 @@ const contactos = () => {
 
       </div>
 
+      <div className="w-1/2 mb-10 mx-auto">
+        {alerta.msg && <Alerta alerta={alerta} />}
+      </div>
 
-      {usuario.contactos.length === 0 ? (
-        <p className="text-center my-24 text-2xl md:m-36 text-blue-600 font-bold">No tienes contactos aún!</p>
-      ) : (
-        <div className="mx-7 mb-14 md:mx-10 grid md:grid-cols-2 xl:grid-cols-4 gap-14">
+      {cargando ? (
+        <Spinner />
+      ) :
+        contactos.length > 0 ? (
+          <div className="mx-7 mb-14 md:mx-10 grid md:grid-cols-2 xl:grid-cols-4 gap-14">
 
-          {usuario.contactos.map(contacto => (
-            <div className="shadow-xl border rounded-xl" key={contacto._id}>
-              <p className="text-center my-4 text-2xl font-bold">{contacto.nombre}</p>
-              <p className="text-center my-2 text-lg"><span className="font-bold text-blue-600">Email:{' '}</span>{contacto.email}</p>
-              <p className="text-center my-2 text-lg"><span className="font-bold text-blue-600">Teléfono:{' '}</span>{contacto.telefono}</p>
-              <div className="m-5 flex flex-col  justify-center gap-5">
-                <button
-                  className="bg-blue-600 py-3 px-10 text-white rounded-md outline-none"
-                >Chat</button>
-                <button
-                  className="bg-red-600 py-3 px-10 text-white rounded-md outline-none"
-                >Eliminar</button>
-              </div>
-            </div>
-          ))}
+            {contactos.map(contacto => (
+              <Contacto
+                key={contacto._id}
+                contacto={contacto}
+              />
+            ))}
 
-        </div>
+          </div>
+        ) : (
+          <p className="text-center my-24 text-2xl md:m-36 text-blue-600 font-bold">No tienes contactos</p>
+        )
+      }
 
-      )}
+      <ModalEliminarContacto />
 
     </Layout>
   )

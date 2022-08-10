@@ -4,6 +4,7 @@ import Layout from "../layout/Layout";
 import Formulario from "../components/Formulario";
 import Campo from "../components/Campo";
 import Alerta from "../components/Alerta";
+import Spinner from "../components/Spinner";
 
 const AgregarContacto = () => {
 
@@ -28,8 +29,6 @@ const AgregarContacto = () => {
         setEmailUsuario('');
 
     }
-
-    if(cargando) 'Cargando...';
 
     const {nombre, email, telefono, _id} = contacto; 
 
@@ -67,7 +66,10 @@ const AgregarContacto = () => {
                             <>
                                 <p className="text-3xl text-blue-600 font-bold my-4">Resultados:</p>
 
-                                <div className="shadow-xl border rounded-xl md:flex items-center md:pl-5 mb-10 gap-14 p-5 md:p-0">
+                                {cargando ? (
+                                    <Spinner />
+                                ) : (
+                                    <div className="shadow-xl border rounded-xl md:flex items-center md:pl-5 mb-10 gap-14 p-5 md:p-0">
 
                                     <p className="text-center my-4 md:my-0 text-2xl font-bold">{nombre}</p>
                                     <p className="text-center mx-2 md:mx-0 my-2 md:my-0 text-lg"><span className="font-bold text-blue-600">Email:{' '}</span>{email}</p>
@@ -81,6 +83,7 @@ const AgregarContacto = () => {
                                     </div>
 
                                 </div>
+                                ) }
                             </>
                         )}
 
