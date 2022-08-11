@@ -144,6 +144,9 @@ const ChatProvider = (props) => {
             chatActualizado.mensajes = [...chatActualizado.mensajes, msg];
             setChat(chatActualizado);
 
+            const chatsActualizados = chats.map(chatState => chatState._id === chat._id ? chat : chatState);
+            setChats(chatsActualizados)
+
         } catch (error) {
             console.log(error);
         }
@@ -163,14 +166,18 @@ const ChatProvider = (props) => {
                 }
             }
 
-            await clienteAxios(`/chats/${chat._id}`, config);
+            const {data} = await clienteAxios(`/chats/${chat._id}`, config);
 
             const chatActualizado = {...chat};
             chatActualizado.mensajes = [];
             setChat(chatActualizado);
 
+            const chatsActualizados = chats.map(chatState => chatState._id === data._id ? data : chatState);
+            console.log(chatsActualizados)
+            setChats(chatsActualizados)
+
         } catch (error) {
-            console.log(error.response.data.msg);
+            console.log(error);
         }
     }
 
