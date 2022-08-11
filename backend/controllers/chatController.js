@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Chat from "../models/Chat.js";
+import Mensaje from "../models/Mensaje.js";
 import Solicitud from "../models/Solicitud.js";
 import Usuario from "../models/Usuario.js";
 
@@ -11,6 +12,10 @@ const crearChat = async (req, res) => {
     const [chat, usuariosArr, solicitudes] = await Promise.all([
         Chat.findOne({
             usuarios
+        }).populate('mensajes' ,{
+            contenido: 1,
+            hora: 1,
+            autor: 1
         }),
         Usuario.find({ _id: usuarios }),
         Solicitud.find({ Para: req.usuario._id }).where("De").equals(contactosId)
@@ -103,11 +108,6 @@ const obtenerChats = async (req, res) => {
 
     });
 
-
-    if (chats.length === 0) {
-        return res.json({ msg: "Aún no tienes chats" });
-    }
-
     res.json(chatsArr[0]);
 }
 
@@ -152,7 +152,7 @@ const accederChat = async (req, res) => {
 const vaciarChat = async (req, res) => {
 
     const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(chat)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         const error = new Error("Id no Válido");
         return res.status(400).json({ msg: error.message })
     }
@@ -173,7 +173,15 @@ const vaciarChat = async (req, res) => {
     try {
 
         chat.mensajes = [];
-        await chat.save();
+
+        await Promise.all([
+            chat.save(),
+            Mensaje.deleteMany({
+                chat: id
+            })
+    
+        ])
+
         res.json(chat)
 
     } catch (error) {

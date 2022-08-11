@@ -12,6 +12,6 @@ const router = express.Router();
 
 router.route('/').post(checkAuth, crearChat).get(checkAuth, obtenerChats);
 router.post('/access', checkAuth, accederChat);
-router.route('/:id').put(checkAuth, vaciarChat).delete(checkAuth, eliminarChat);
+router.route('/:id').get(checkAuth, vaciarChat).delete(checkAuth, eliminarChat);
 
 export default router;

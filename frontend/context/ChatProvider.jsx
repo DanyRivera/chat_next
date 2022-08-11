@@ -14,6 +14,7 @@ const ChatProvider = (props) => {
     const [chats, setChats] = useState([]);
     const [alerta, setAlerta] = useState({});
     const [cargando, setCargando] = useState(true);
+    const [mensaje, setMensaje] = useState({});
 
     const crearChat = async usuarios => {
         
@@ -113,16 +114,79 @@ const ChatProvider = (props) => {
         }
     } 
 
+    const submitMensaje = async contenido => {
+        try {
+
+            const token = localStorage.getItem('token');
+
+            if (!token) return;
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+            const {data} = await clienteAxios.post('/mensajes', {
+                contenido: contenido,
+                chat: chat._id
+            }, config);
+
+            const msg = {
+                autor: data.autor,
+                contenido: data.contenido,
+                hora: data.hora,
+                _id: data._id
+            }
+
+            const chatActualizado = {...chat};
+            chatActualizado.mensajes = [...chatActualizado.mensajes, msg];
+            setChat(chatActualizado);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const vaciarChat = async () => {
+        try {
+            
+            const token = localStorage.getItem('token');
+
+            if (!token) return;
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+            await clienteAxios(`/chats/${chat._id}`, config);
+
+            const chatActualizado = {...chat};
+            chatActualizado.mensajes = [];
+            setChat(chatActualizado);
+
+        } catch (error) {
+            console.log(error.response.data.msg);
+        }
+    }
+
     return (
         <ChatContext.Provider
             value={{
                 chat,
                 chats,
                 cargando,
+                mensaje,
                 crearChat,
                 obtenerChats,
                 cambiarChat,
-                eliminarChat
+                eliminarChat,
+                submitMensaje,
+                vaciarChat
             }}
         >
             {props.children}
