@@ -17,9 +17,9 @@ const ChatProvider = (props) => {
     const [mensaje, setMensaje] = useState({});
 
     const crearChat = async usuarios => {
-        
+
         try {
-            
+
             const token = localStorage.getItem('token');
 
             if (!token) return;
@@ -31,7 +31,7 @@ const ChatProvider = (props) => {
                 }
             }
 
-            const {data} = await clienteAxios.post('/chats', {usuarios}, config);
+            const { data } = await clienteAxios.post('/chats', { usuarios }, config);
 
             setChat(data);
             router.push('/chats');
@@ -46,7 +46,7 @@ const ChatProvider = (props) => {
         try {
 
             setCargando(true);
-            
+
             const token = localStorage.getItem('token');
 
             if (!token) return;
@@ -58,11 +58,11 @@ const ChatProvider = (props) => {
                 }
             }
 
-            const {data} = await clienteAxios('/chats', config);
+            const { data } = await clienteAxios('/chats', config);
 
             setChats(data);
-            
-            if(Object.keys(chat).length === 0) {
+
+            if (Object.keys(chat).length === 0) {
                 setChat(data[0])
             }
 
@@ -81,7 +81,7 @@ const ChatProvider = (props) => {
 
     const eliminarChat = async chat => {
         try {
-            
+
             const token = localStorage.getItem('token');
 
             if (!token) return;
@@ -93,7 +93,7 @@ const ChatProvider = (props) => {
                 }
             }
 
-            const {data} = await clienteAxios.delete(`/chats/${chat._id}`, config);
+            const { data } = await clienteAxios.delete(`/chats/${chat._id}`, config);
 
             toast.success(data.msg, {
                 position: "bottom-right",
@@ -105,14 +105,13 @@ const ChatProvider = (props) => {
                 progress: undefined,
             })
 
-            const chatsState = [...chats];
-            const chatsActualizados = chatsState.filter(chatState => chatState._id !== chat._id);
+            const chatsActualizados = chats.filter(chatState => chatState._id !== chat._id);
             setChats(chatsActualizados);
 
         } catch (error) {
             console.log(error);
         }
-    } 
+    }
 
     const submitMensaje = async contenido => {
         try {
@@ -128,7 +127,7 @@ const ChatProvider = (props) => {
                 }
             }
 
-            const {data} = await clienteAxios.post('/mensajes', {
+            const { data } = await clienteAxios.post('/mensajes', {
                 contenido: contenido,
                 chat: chat._id
             }, config);
@@ -140,12 +139,19 @@ const ChatProvider = (props) => {
                 _id: data._id
             }
 
-            const chatActualizado = {...chat};
+            const chatActualizado = { ...chat };
             chatActualizado.mensajes = [...chatActualizado.mensajes, msg];
-            setChat(chatActualizado);
+            setChat(chatActualizado)
 
-            const chatsActualizados = chats.map(chatState => chatState._id === chat._id ? chat : chatState);
-            setChats(chatsActualizados)
+
+            // if(chat.mensajes.length === 0) {
+            //     const chatsActualizados = chats.map(chatState => chatState._id === chat._id)
+            // }
+
+                const chatsActualizados = chats.map(chatState => chatState._id === chatActualizado._id ? chatActualizado : chatState);
+                console.log(chatsActualizados);
+                console.log(chatActualizado);
+                setChats(chatsActualizados)
 
         } catch (error) {
             console.log(error);
@@ -154,7 +160,7 @@ const ChatProvider = (props) => {
 
     const vaciarChat = async () => {
         try {
-            
+
             const token = localStorage.getItem('token');
 
             if (!token) return;
@@ -166,14 +172,13 @@ const ChatProvider = (props) => {
                 }
             }
 
-            const {data} = await clienteAxios(`/chats/${chat._id}`, config);
+            const { data } = await clienteAxios(`/chats/${chat._id}`, config);
 
-            const chatActualizado = {...chat};
+            const chatActualizado = { ...chat };
             chatActualizado.mensajes = [];
             setChat(chatActualizado);
 
-            const chatsActualizados = chats.map(chatState => chatState._id === data._id ? data : chatState);
-            console.log(chatsActualizados)
+            const chatsActualizados = chats.map(chatState => chatState._id === chatActualizado._id ? chatActualizado : chatState);
             setChats(chatsActualizados)
 
         } catch (error) {
