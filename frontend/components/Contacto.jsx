@@ -19,7 +19,7 @@ const Contacto = ({ contacto }) => {
     }
 
     return (
-        <div className="shadow-xl border rounded-xl">
+        <div className="shadow-xl border rounded-xl px-2 md:px-0">
             <p className="text-center my-4 text-2xl font-bold">{contacto.nombre}</p>
             <p className="text-center my-2 text-lg"><span className="font-bold text-blue-600">Email:{' '}</span>{contacto.email}</p>
             <p className="text-center my-2 text-lg"><span className="font-bold text-blue-600">Teléfono:{' '}</span>{contacto.telefono}</p>

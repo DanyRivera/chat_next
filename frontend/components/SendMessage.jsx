@@ -4,17 +4,17 @@ import useChat from "../hooks/useChat";
 const SendMessage = () => {
 
     const [contenido, setContenido] = useState('');
-    const {submitMensaje} = useChat();
+    const { submitMensaje } = useChat();
 
     const handleSubmitMensaje = async e => {
         e.preventDefault();
         await submitMensaje(contenido);
         setContenido('');
     }
-    
+
     return (
 
-        <div className=' mt-3 px-2 md:mt-0 md:mr-5 relative'>
+        <div className='mt-3 px-2 md:mt-0 md:mr-5 md:relative fixed w-full'>
             <form
                 onSubmit={handleSubmitMensaje}
             >

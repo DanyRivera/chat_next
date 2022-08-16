@@ -1,8 +1,10 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import clienteAxios from "../config/clienteAxios";
 import { toast } from "react-toastify";
+import { io } from "socket.io-client";
 
+let socket;
 
 const ChatContext = createContext();
 
@@ -12,9 +14,36 @@ const ChatProvider = (props) => {
 
     const [chat, setChat] = useState({});
     const [chats, setChats] = useState([]);
-    const [alerta, setAlerta] = useState({});
     const [cargando, setCargando] = useState(true);
-    const [mensaje, setMensaje] = useState({});
+    const [chatMovil, setChatMovil] = useState(false);
+
+    useEffect(() => {
+        socket = io(process.env.NEXT_PUBLIC_BACKEND_URL);
+    }, [])
+
+    const accederChat = async chatId => {
+        try {
+            const token = localStorage.getItem('token');
+
+            if (!token) return;
+
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            }
+
+            const {data} = await clienteAxios.post('/chats/access', {
+                id: chatId
+            }, config);
+
+            setChat(data);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const crearChat = async usuarios => {
 
@@ -33,7 +62,7 @@ const ChatProvider = (props) => {
 
             const { data } = await clienteAxios.post('/chats', { usuarios }, config);
 
-            setChat(data);
+            accederChat(data._id);
             router.push('/chats');
 
         } catch (error) {
@@ -63,20 +92,26 @@ const ChatProvider = (props) => {
             setChats(data);
 
             if (Object.keys(chat).length === 0) {
-                setChat(data[0])
+                accederChat(data[0]._id)
+            } else {
+                const chatActivo = data.find(chatState => chat._id === chatState._id);
+                accederChat(chatActivo._id)
             }
+
+
 
         } catch (error) {
             console.log(error);
-        } finally {
-            setCargando(false);
         }
+
+        setCargando(false)
 
     }
 
     const cambiarChat = chatId => {
-        const chatActivo = chats.find(chatState => chatState._id === chatId);
-        setChat(chatActivo);
+        // const chatActivo = chats.find(chatState => chatState._id === chatId);
+        // setChat(chatActivo);
+        accederChat(chatId);
     }
 
     const eliminarChat = async chat => {
@@ -132,26 +167,8 @@ const ChatProvider = (props) => {
                 chat: chat._id
             }, config);
 
-            const msg = {
-                autor: data.autor,
-                contenido: data.contenido,
-                hora: data.hora,
-                _id: data._id
-            }
-
-            const chatActualizado = { ...chat };
-            chatActualizado.mensajes = [...chatActualizado.mensajes, msg];
-            setChat(chatActualizado)
-
-
-            // if(chat.mensajes.length === 0) {
-            //     const chatsActualizados = chats.map(chatState => chatState._id === chat._id)
-            // }
-
-                const chatsActualizados = chats.map(chatState => chatState._id === chatActualizado._id ? chatActualizado : chatState);
-                console.log(chatsActualizados);
-                console.log(chatActualizado);
-                setChats(chatsActualizados)
+            //Socket.io
+            socket.emit('crear mensaje', data)
 
         } catch (error) {
             console.log(error);
@@ -178,13 +195,26 @@ const ChatProvider = (props) => {
             chatActualizado.mensajes = [];
             setChat(chatActualizado);
 
-            const chatsActualizados = chats.map(chatState => chatState._id === chatActualizado._id ? chatActualizado : chatState);
-            setChats(chatsActualizados)
-
         } catch (error) {
             console.log(error);
         }
     }
+
+
+
+    //SOCKET.IO
+    const handleMensaje = mensaje => {
+        console.log(mensaje);
+        const chatActualizado = { ...chat };
+        chatActualizado.mensajes = [...chatActualizado.mensajes, mensaje];
+        setChat(chatActualizado)
+    }
+
+    //TODO: Arreglar el problema del state de chats y chat
+    //TODO: Arreglar el problema de crear un chat y asignarselo al otro usuaruio
+    //TODO: Arreglar el problma de vaciar y elimar chats
+    //TODO: Cerrar Sesión
+
 
     return (
         <ChatContext.Provider
@@ -192,13 +222,15 @@ const ChatProvider = (props) => {
                 chat,
                 chats,
                 cargando,
-                mensaje,
+                chatMovil,
                 crearChat,
                 obtenerChats,
                 cambiarChat,
                 eliminarChat,
                 submitMensaje,
-                vaciarChat
+                vaciarChat,
+                setChatMovil,
+                handleMensaje
             }}
         >
             {props.children}

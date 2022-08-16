@@ -38,6 +38,30 @@ app.use('/api/mensajes', mensajeRoutes)
 //PORT
 const port = process.env.PORT || 4000;
 
-app.listen(port, () => {
+const servidor = app.listen(port, () => {
     console.log(`Servidor Corriendo en el puerto ${port}`)
+})
+
+//SOCKET.IO
+import { Server } from "socket.io";
+
+const io = new Server(servidor, {
+    pingTimeout: 6000,
+    cors: {
+        origin: process.env.FRONTEND_URL
+    }
+});
+
+io.on("connection", (socket) => {
+    console.log('Conectado a Socket.io');
+
+    //Eventos de Socket.io
+    socket.on('abrir chat', chatId => {
+        socket.join(chatId);
+    })
+
+    socket.on('crear mensaje', mensaje => {
+        const chat = mensaje.chat;
+        socket.to(chat).emit('mensaje creado', mensaje);
+    })
 })

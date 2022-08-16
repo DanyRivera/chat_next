@@ -12,10 +12,6 @@ const crearChat = async (req, res) => {
     const [chat, usuariosArr, solicitudes] = await Promise.all([
         Chat.findOne({
             usuarios
-        }).populate('mensajes' ,{
-            contenido: 1,
-            hora: 1,
-            autor: 1
         }),
         Usuario.find({ _id: usuarios }),
         Solicitud.find({ Para: req.usuario._id }).where("De").equals(contactosId)
@@ -87,12 +83,8 @@ const crearChat = async (req, res) => {
 
 const obtenerChats = async (req, res) => {
 
-    const chats = await Chat.find({ usuarios: req.usuario._id }).populate("usuarios", {
+    const chats = await Chat.find({ usuarios: req.usuario._id }).select('-mensajes').populate("usuarios", {
         nombre: 1
-    }).populate("mensajes" ,{
-        contenido: 1,
-        hora: 1,
-        autor: 1
     });
 
     const chatsArr = chats.map(chat => {
