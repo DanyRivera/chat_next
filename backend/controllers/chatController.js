@@ -59,10 +59,10 @@ const crearChat = async (req, res) => {
     //Verificar que los dos se tengan mutuamente como contacto
     const solicitudesAceptadas = solicitudes.filter(solicitud => solicitud.estado === "Aceptada");
 
-    if (solicitudesAceptadas.length !== contactosId.length) {
-        const error = new Error("Algun usuario del chat no lo tienes como contacto o el no te tiene como contacto");
-        return res.status(401).json({ msg: error.message })
-    }
+    // if (solicitudesAceptadas.length !== contactosId.length) {
+    //     const error = new Error("Algun usuario del chat no lo tienes como contacto o el no te tiene como contacto");
+    //     return res.status(401).json({ msg: error.message })
+    // }
 
     //Crear el Chat
     try {
@@ -83,7 +83,7 @@ const crearChat = async (req, res) => {
 
 const obtenerChats = async (req, res) => {
 
-    const chats = await Chat.find({ usuarios: req.usuario._id }).select('-mensajes').populate("usuarios", {
+    const chats = await Chat.find({ usuarios: req.usuario._id }).populate('mensajes').populate("usuarios", {
         nombre: 1
     });
 
@@ -99,6 +99,8 @@ const obtenerChats = async (req, res) => {
         return chats;
 
     });
+
+    console.log(chatsArr[0]);
 
     res.json(chatsArr[0]);
 }

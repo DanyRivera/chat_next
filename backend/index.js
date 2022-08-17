@@ -64,4 +64,12 @@ io.on("connection", (socket) => {
         const chat = mensaje.chat;
         socket.to(chat).emit('mensaje creado', mensaje);
     })
+
+    socket.on('vaciar chat', chat => {
+        socket.to(chat._id).emit('chat vacio', chat);
+    })
+
+    socket.on('eliminar chat', chat => {
+        socket.to(chat._id).emit('chat eliminado', chat);
+    })
 })

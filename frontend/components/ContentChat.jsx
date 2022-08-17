@@ -8,22 +8,22 @@ const ContentChat = () => {
 
     const { chat } = useChat();
 
+    console.log(chat);
+
     useEffect(() => {
         ultimoMensaje.current?.scrollIntoView();
     })
-
-    console.log(chat);
 
     return (
         <main className='md:h-[70vh] overflow-y-scroll'>
 
             <div className='pt-5 h-[55vh]'>
-                {/* {chat.mensajes.map(mensaje => (
+                {chat.mensajes.map(mensaje => (
                     <Message
                         key={mensaje._id}
                         mensaje={mensaje}
                     />
-                ))} */}
+                ))}
 
                 <div ref={ultimoMensaje} ></div>
             </div>

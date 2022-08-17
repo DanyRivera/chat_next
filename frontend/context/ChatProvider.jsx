@@ -62,7 +62,7 @@ const ChatProvider = (props) => {
 
             const { data } = await clienteAxios.post('/chats', { usuarios }, config);
 
-            accederChat(data._id);
+            setChat(data)
             router.push('/chats');
 
         } catch (error) {
@@ -92,13 +92,11 @@ const ChatProvider = (props) => {
             setChats(data);
 
             if (Object.keys(chat).length === 0) {
-                accederChat(data[0]._id)
+                setChat(data[0])
             } else {
                 const chatActivo = data.find(chatState => chat._id === chatState._id);
-                accederChat(chatActivo._id)
+                setChat(chatActivo)
             }
-
-
 
         } catch (error) {
             console.log(error);
@@ -109,9 +107,9 @@ const ChatProvider = (props) => {
     }
 
     const cambiarChat = chatId => {
-        // const chatActivo = chats.find(chatState => chatState._id === chatId);
-        // setChat(chatActivo);
-        accederChat(chatId);
+        const chatActivo = chats.find(chat => chat._id === chatId);
+        setChat(chatActivo);
+        // accederChat(chatId);
     }
 
     const eliminarChat = async chat => {
@@ -140,8 +138,7 @@ const ChatProvider = (props) => {
                 progress: undefined,
             })
 
-            const chatsActualizados = chats.filter(chatState => chatState._id !== chat._id);
-            setChats(chatsActualizados);
+            socket.emit('eliminar chat', chat);
 
         } catch (error) {
             console.log(error);
@@ -189,11 +186,9 @@ const ChatProvider = (props) => {
                 }
             }
 
-            const { data } = await clienteAxios(`/chats/${chat._id}`, config);
+            const {data} = await clienteAxios(`/chats/${chat._id}`, config);
 
-            const chatActualizado = { ...chat };
-            chatActualizado.mensajes = [];
-            setChat(chatActualizado);
+            socket.emit('vaciar chat', data);
 
         } catch (error) {
             console.log(error);
@@ -204,15 +199,34 @@ const ChatProvider = (props) => {
 
     //SOCKET.IO
     const handleMensaje = mensaje => {
-        console.log(mensaje);
         const chatActualizado = { ...chat };
         chatActualizado.mensajes = [...chatActualizado.mensajes, mensaje];
-        setChat(chatActualizado)
+        accederChat(chatActualizado._id);
+
+        const chatsState = [...chats]; 
+        const chatsActualizado = chatsState.map(chat => chat._id === chatActualizado._id ? chatActualizado : chat);
+        setChats(chatsActualizado)
     }
 
-    //TODO: Arreglar el problema del state de chats y chat
-    //TODO: Arreglar el problema de crear un chat y asignarselo al otro usuaruio
-    //TODO: Arreglar el problma de vaciar y elimar chats
+    const handleVaciarChat = () => {
+        const chatActualizado = { ...chat };
+        chatActualizado.mensajes = [];
+        setChat(chatActualizado);
+
+        const chatsState = [...chats]; 
+        const chatsActualizado = chatsState.map(chat => chat._id === chatActualizado._id ? chatActualizado : chat);
+        setChats(chatsActualizado)
+    }
+
+    const handleEliminarChat = chatObj => {
+        const chatsState = [...chats]; 
+        const chatsActualizados = chatsState.filter(chatState => chatState._id !== chatObj._id);
+        setChats(chatsActualizados);
+        setChatMovil(false);
+    }
+
+    //*Dejar el chat funcional
+    //TODO: VAciar y eliminar chats con socket.io
     //TODO: Cerrar Sesión
 
 
@@ -230,7 +244,9 @@ const ChatProvider = (props) => {
                 submitMensaje,
                 vaciarChat,
                 setChatMovil,
-                handleMensaje
+                handleMensaje,
+                handleVaciarChat,
+                handleEliminarChat
             }}
         >
             {props.children}

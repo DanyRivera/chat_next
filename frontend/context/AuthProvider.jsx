@@ -48,16 +48,6 @@ const AuthProvider = ({ children }) => {
 
     }, [])
 
-    const handleChangeMensaje = obj => {
-        // setMensaje(obj);
-    }
-
-    const handleSubmitMensaje = e => {
-        // e.preventDefault();
-        // setChat(chat.mensajes.push(mensaje))
-        // setMensaje({});
-    }
-
 
     return (
         <AuthContext.Provider

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import {io} from "socket.io-client";
+import { io } from "socket.io-client";
 import Layout from '../layout/Layout';
 import Chat from '../components/Chat';
 import VistaChat from '../components/VistaChat';
@@ -11,8 +11,8 @@ let socket;
 
 const chats = () => {
 
-    const { obtenerChats, chats, cargando, chatMovil, chat, handleMensaje } = useChat();
-    const {auth} = useAuth();
+    const { obtenerChats, chats, cargando, chatMovil, chat, handleMensaje, handleVaciarChat, handleEliminarChat } = useChat();
+    const { auth } = useAuth();
 
     useEffect(() => {
         obtenerChats();
@@ -21,12 +21,25 @@ const chats = () => {
     useEffect(() => {
         socket = io(process.env.NEXT_PUBLIC_BACKEND_URL);
         socket.emit('abrir chat', chat._id)
-    }, [])
+    }, [chat])
+
 
     useEffect(() => {
         socket.on('mensaje creado', nuevoMensaje => {
-            if(nuevoMensaje.chat === chat._id) {
+            if (nuevoMensaje.chat === chat._id) {
                 handleMensaje(nuevoMensaje);
+            }
+        })
+
+        socket.on('chat vacio', chatObj => {
+            if (chatObj._id === chat._id) {
+                handleVaciarChat();
+            }
+        })
+
+        socket.on('chat eliminado', chatObj => {
+            if (chatObj._id === chat._id) {
+                handleEliminarChat(chatObj);
             }
         })
     })

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useChat from "../hooks/useChat";
 
 const SendMessage = () => {
@@ -29,7 +29,7 @@ const SendMessage = () => {
                 <input
                     type="submit"
                     value="Send"
-                    className='text-blue-600 font-bold absolute right-6 top-3 cursor-pointer'
+                    className='text-blue-600 font-bold absolute right-6 top-3 cursor-pointer outline-none'
                 />
             </form>
         </div>

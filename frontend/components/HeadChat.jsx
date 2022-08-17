@@ -21,7 +21,7 @@ const HeadChat = () => {
                     </svg>
                 </div>
                 <div className="text-lg text-slate-500">
-                    {chat.nombre}
+                    {chat?.nombre}
                 </div>
             </div>
 
