@@ -20,11 +20,12 @@ const chats = () => {
 
     useEffect(() => {
         socket = io(process.env.NEXT_PUBLIC_BACKEND_URL);
-        socket.emit('abrir chat', chat._id)
+        socket.emit('abrir chat', chat?._id)
     }, [chat])
 
 
     useEffect(() => {
+        
         socket.on('mensaje creado', nuevoMensaje => {
             if (nuevoMensaje.chat === chat._id) {
                 handleMensaje(nuevoMensaje);

@@ -225,10 +225,14 @@ const ChatProvider = (props) => {
         setChatMovil(false);
     }
 
-    //*Dejar el chat funcional
-    //TODO: VAciar y eliminar chats con socket.io
-    //TODO: Cerrar Sesión
+    //TODO:Dejar el chat funcional
+    //*VAciar y eliminar chats con socket.io
+    //* Cerrar Sesión
 
+    const cerrarSesionChat = () => {
+        setChat({})
+        setChats([]);
+    }
 
     return (
         <ChatContext.Provider
@@ -246,7 +250,8 @@ const ChatProvider = (props) => {
                 setChatMovil,
                 handleMensaje,
                 handleVaciarChat,
-                handleEliminarChat
+                handleEliminarChat,
+                cerrarSesionChat
             }}
         >
             {props.children}

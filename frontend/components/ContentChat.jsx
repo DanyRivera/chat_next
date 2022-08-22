@@ -8,11 +8,9 @@ const ContentChat = () => {
 
     const { chat } = useChat();
 
-    console.log(chat);
-
     useEffect(() => {
         ultimoMensaje.current?.scrollIntoView();
-    })
+    }, [chat])
 
     return (
         <main className='md:h-[70vh] overflow-y-scroll'>

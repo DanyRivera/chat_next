@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import RutaPrivada from "../components/RutaPrivada";
 import Head from 'next/head';
 import { ToastContainer } from 'react-toastify';
+import useChat from "../hooks/useChat";
+import useAuth from "../hooks/useAuth";
 import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = (props) => {
@@ -13,6 +15,15 @@ const Layout = (props) => {
         { id: 2, nombre: "Contactos", url: "/contactos" },
         { id: 3, nombre: "Solicitudes", url: "/solicitudes" },
     ]
+
+    const {cerrarSesionAuth} = useAuth();
+    const {cerrarSesionChat} = useChat();
+
+    const handleCerrasSesion = () => {
+        localStorage.removeItem('token');
+        cerrarSesionAuth();
+        cerrarSesionChat();
+    }
 
     return (
         <RutaPrivada>
@@ -49,12 +60,15 @@ const Layout = (props) => {
                                 </svg>
                             )}
 
-
-
                             <p>{seccion.nombre}</p>
                         </button>
 
                     ))}
+
+                    <button
+                        onClick={handleCerrasSesion}
+                        className="flex justify-center gap-1 p-5 w-full md:py-8 outline-none text-blue-600 border border-blue-600"
+                    >Cerrar Sesión</button>
                 </div>
 
                 {props.children}
