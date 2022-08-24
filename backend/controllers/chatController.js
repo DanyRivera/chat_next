@@ -100,9 +100,15 @@ const obtenerChats = async (req, res) => {
 
     });
 
-    console.log(chatsArr[0]);
+    // console.log(chatsArr[0]);
 
-    res.json(chatsArr[0]);
+    if(chatsArr.length > 0) {
+        res.json(chatsArr[0]);
+
+    } else {
+        res.json(chatsArr);
+    }
+
 }
 
 const accederChat = async (req, res) => {

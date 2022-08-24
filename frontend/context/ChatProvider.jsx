@@ -99,7 +99,7 @@ const ChatProvider = (props) => {
             }
 
         } catch (error) {
-            console.log(error);
+            console.log(error.response);
         }
 
         setCargando(false)
