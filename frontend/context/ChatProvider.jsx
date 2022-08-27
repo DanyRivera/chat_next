@@ -90,16 +90,15 @@ const ChatProvider = (props) => {
             const { data } = await clienteAxios('/chats', config);
 
             setChats(data);
+            setChat(data[0])
 
-            if (Object.keys(chat).length === 0) {
-                setChat(data[0])
-            } else {
+            if (chats.length > 1) {
                 const chatActivo = data.find(chatState => chat._id === chatState._id);
                 setChat(chatActivo)
             }
 
         } catch (error) {
-            console.log(error.response);
+            console.log(error);
         }
 
         setCargando(false)
